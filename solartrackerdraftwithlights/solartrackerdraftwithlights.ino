@@ -105,10 +105,7 @@ void loop()
 
       Serial.println("Night: lights on.");
 
-      // turn switch on
-      //digitalWrite(switchpin, HIGH);
-      //delay(1000);
-      //digitalWrite(switchpin, LOW);
+      digitalWrite(switchpin, HIGH);
 
       for (int time = 30000; time > 0; time = time / 1.1)
       {
@@ -134,7 +131,9 @@ void loop()
 
         }
       }
-      //otherwise continue
+      //other wise turn off and continue
+      digitalWrite(switchpin, HIGH);
+      
     }
     else
     {
@@ -248,3 +247,4 @@ void track()
   pos = constrain(pos, 0, 180);
   delay(125);
 }
+
