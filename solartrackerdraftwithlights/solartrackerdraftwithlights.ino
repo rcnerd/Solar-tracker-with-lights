@@ -1,5 +1,9 @@
 #include <Servo.h>
 
+//manual switch for manual on and off
+const int manswitch = 4;
+const int autoon = 7;
+
 // porch light switch pin
 const int switchpin = 5;
 
@@ -40,6 +44,10 @@ void setup()
 
   // set up pin 53 as output for switch
   pinMode(switchpin, OUTPUT);
+
+  // set up pins for manual switch
+  pinMode(manswitch, INPUT);
+  pinMode(autoon, INPUT);
 
   //on board led for debug and startup
   pinMode(13, OUTPUT);
@@ -105,8 +113,11 @@ void loop()
 
       Serial.println("Night: lights on.");
 
-      digitalWrite(switchpin, HIGH);
-
+      // if switch is set to manual off dont turn on light
+      if (digitalRead(autoon) == 1)
+      {
+        digitalWrite(switchpin, HIGH);
+      }
       for (int time = 30000; time > 0; time = time / 1.1)
       {
         digitalWrite(13, HIGH);
@@ -131,14 +142,27 @@ void loop()
 
         }
       }
-      //other wise turn off and continue
-      digitalWrite(switchpin, HIGH);
-      
     }
     else
     {
-      //turn switch off
-      //digitalWrite(switchpin, LOW);
+    //other wise turn off and continue
+      if (digitalRead(autoon) == 1)
+      {
+        digitalWrite(switchpin, LOW);
+      }
+      
+      // if manual switch set to on turn on
+      if (digitalRead(manswitch) == 1)
+      {
+         digitalWrite(switchpin, HIGH); 
+      {
+      
+        // only turn off if manual switch is turned to off or if manual is on and it is day (see above) turn off
+        if (digitalRead(manswitch) == 0 && digitalRead(autoon) == 0)
+        {
+         digitalWrite(switchpin, LOW); 
+        }
+        
     }
     // if voltage less than good wait 1 min
   }
