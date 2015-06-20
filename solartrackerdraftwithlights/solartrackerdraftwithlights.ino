@@ -166,18 +166,20 @@ void loop()
         }
         // if voltage less than good wait 1 min
       }
+    }
+  }
       else
       {
         Serial.println("low voltage");
-        delay(15000);
+        //delay(15000);
       }
 
-
     }
+  
+
 
     void autoTune()
     {
-
       // update latest low and high values
       if (lightLevel < low)
       {
@@ -210,7 +212,7 @@ void loop()
       lightLevel1 = map(lightLevel1, 0, precision, 0, 60);
       lightLevel1 = constrain(lightLevel1, 0, 60);
     }
-
+  
     void tracked()
     {
       Serial.println("paused");
