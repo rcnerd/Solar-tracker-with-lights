@@ -1,7 +1,7 @@
 #include <Servo.h>
 
 //manual switch for manual on and off
-const int manswitch = 4;
+const int manswitch = 6;
 const int autoon = 7;
 
 // porch light switch pin
@@ -102,7 +102,7 @@ void loop()
     }
 
     // if manual switch set to on turn on
-    if (digitalRead(manswitch) == 1)
+    if (analogRead(manswitch) > 200)
     {
       Serial.println("manual lights on");
       digitalWrite(switchpin, HIGH);
@@ -122,23 +122,23 @@ void loop()
       Serial.println(pos);
 
       // if switch is set to manual off dont turn on light
-      if (digitalRead(autoon) == 1)
+      if (analogRead(autoon) > 200)
       {
         digitalWrite(switchpin, HIGH);
         Serial.println("Night: lights on.");
       }
-      for (int time = 30000; time > 0; time = time / 1.1)
+      for (long int time1 = 30000; time1 > 0; time1 = time1 / 1.1)
       {
         digitalWrite(13, HIGH);
-        delay(time / 3.6 + 10);
+        delay(time1 / 3.6 + 10);
         digitalWrite(13, LOW);
-        delay(time + 10);
+        delay(time1 + 10);
         digitalWrite(13, HIGH);
-        delay(time / 3.6 + 10);
+        delay(time1 / 3.6 + 10);
         digitalWrite(13, LOW);
-        delay(time + 10);
+        delay(time1 + 10);
 
-        Serial.println(time);
+        Serial.println(time1);
 
         if (Serial.available() > 0) {
 
@@ -147,7 +147,7 @@ void loop()
           Serial.println(Serial.readString());
 
           Serial.println("Retracking");
-          time = 0;
+          time1 = 0;
 
         }
       }
@@ -155,7 +155,7 @@ void loop()
     else
     {
       //other wise turn off and continue
-      if (digitalRead(autoon) == 1)
+      if (analogRead(autoon) > 200)
       {
         digitalWrite(switchpin, LOW);
       }
@@ -163,7 +163,7 @@ void loop()
     }
 
     // only turn off if manual switch is turned to off or if auto is on and it is day (see above) turn off
-    if (digitalRead(manswitch) == 0 && digitalRead(autoon) == 0)
+    if (analogRead(manswitch) < 200 && analogRead(autoon) < 200)
     {
       digitalWrite(switchpin, LOW);
     }
